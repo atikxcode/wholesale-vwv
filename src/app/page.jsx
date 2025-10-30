@@ -60,7 +60,7 @@ export default function RegistrationPage() {
             ...userInfo,
             action: isUpdate ? 'update' : undefined // Omit 'create', it's the default for new user
         }),
-        })
+      })
 
       const data = await response.json()
       
@@ -78,8 +78,55 @@ export default function RegistrationPage() {
     }
   }
 
+  // 🔥 FIXED: Role-based redirect function with proper error handling
+  const redirectBasedOnRole = (userRole, userName) => {
+    let redirectPath = '/'
+    let roleMessage = `Welcome ${userName}!`
+
+    // Default to user role if role is undefined or invalid
+    const role = userRole || 'user'
+
+    switch (role) {
+      case 'admin':
+        redirectPath = '/admin'
+        roleMessage = `Welcome Admin, ${userName}!`
+        break
+      case 'wholesale_pos':
+        redirectPath = '/pos'
+        roleMessage = `Welcome to POS, ${userName}!`
+        break
+      case 'moderator':
+        redirectPath = '/'
+        roleMessage = `Welcome Moderator, ${userName}!`
+        break
+      case 'manager':
+        redirectPath = '/'
+        roleMessage = `Welcome Manager, ${userName}!`
+        break
+      default:
+        redirectPath = '/'
+        roleMessage = `Welcome ${userName}!`
+    }
+
+    console.log('Redirecting to:', redirectPath, 'with role:', role)
+
+    Swal.fire({
+      toast: true,
+      position: 'top-end',
+      icon: 'success',
+      title: roleMessage,
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+    }).then(() => {
+      // Use window.location for a hard redirect to avoid any client-side routing issues
+      window.location.href = redirectPath
+    })
+  }
+
   // Google login function
   const handleGoogleLoginAndRedirect = async () => {
+    setIsLoading(true)
     try {
       const result = await handleGoogleSignIn()
       if (result.user) {
@@ -101,20 +148,14 @@ export default function RegistrationPage() {
           firebaseUid: result.user.uid
         })
 
-        Swal.fire({
-          toast: true,
-          position: 'top-end',
-          icon: 'success',
-          title: `Welcome ${dbUser.name}!`,
-          showConfirmButton: false,
-          timer: 3000,
-          timerProgressBar: true,
-        })
+        console.log('DB User:', dbUser)
 
-        router.push('/')
+        // 🔥 UPDATED: Use role-based redirect
+        redirectBasedOnRole(dbUser.role, dbUser.name)
       }
     } catch (error) {
       console.error('Google Sign-In Error:', error)
+      setIsLoading(false)
       Swal.fire({
         toast: true,
         position: 'top-end',
@@ -128,6 +169,7 @@ export default function RegistrationPage() {
 
   // Apple login function
   // const handleAppleLoginAndRedirect = async () => {
+  //   setIsLoading(true)
   //   try {
   //     const result = await handleAppleSignIn()
   //     const loggedInUser = result.user
@@ -143,19 +185,13 @@ export default function RegistrationPage() {
   //       firebaseUid: loggedInUser.uid
   //     })
 
-  //     Swal.fire({
-  //       toast: true,
-  //       position: 'top-end',
-  //       icon: 'success',
-  //       title: `Welcome ${dbUser.name}!`,
-  //       showConfirmButton: false,
-  //       timer: 3000,
-  //       timerProgressBar: true,
-  //     })
+  //     console.log('DB User:', dbUser)
 
-  //     router.push('/')
+  //     // 🔥 UPDATED: Use role-based redirect
+  //     redirectBasedOnRole(dbUser.role, dbUser.name)
   //   } catch (error) {
   //     console.error('Apple Sign-In Error:', error)
+  //     setIsLoading(false)
   //     Swal.fire({
   //       toast: true,
   //       position: 'top-end',
@@ -222,19 +258,13 @@ export default function RegistrationPage() {
           firebaseUid: result.user.uid
         })
 
-        Swal.fire({
-          toast: true,
-          position: 'top-end',
-          icon: 'success',
-          title: `Welcome back, ${dbUser.name}!`,
-          showConfirmButton: false,
-          timer: 3000,
-          timerProgressBar: true,
-        })
+        console.log('DB User:', dbUser)
 
-        router.push('/')
+        // 🔥 UPDATED: Use role-based redirect
+        redirectBasedOnRole(dbUser.role, dbUser.name)
       } catch (error) {
         console.error(error)
+        setIsLoading(false)
 
         let message = 'Login failed'
         if (
@@ -296,8 +326,10 @@ export default function RegistrationPage() {
         setPhoneNumber('')
         setAccountType('Login')
         await logOut()
+        setIsLoading(false)
       } catch (error) {
         console.error(error)
+        setIsLoading(false)
         
         let message = 'Registration failed'
         if (error.code === 'auth/email-already-in-use') {
@@ -321,8 +353,6 @@ export default function RegistrationPage() {
         })
       }
     }
-
-    setIsLoading(false)
   }
 
   // Password Reset
