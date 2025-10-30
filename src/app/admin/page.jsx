@@ -96,17 +96,17 @@ export default function AdminDashboard() {
 
   // Updated sidebar options with new items
   const sidebarOptions = [
-    { href: '/admin/statsManage', icon: FaChartLine, label: 'Stats Management', color: colors.primary },
-    { href: '/admin/userManage', icon: FaUsers, label: 'User Management', color: colors.info },
-    { href: '/admin/SellPage', icon: FaCubes, label: 'Sell Page', color: colors.success },
-    { href: '/admin/AddProduct', icon: FaPlus, label: 'Add Product', color: colors.warning },
-    { href: '/admin/ManageProduct', icon: FaPen, label: 'Manage Products', color: colors.secondary },
-    { href: '/admin/ManageOrders', icon: FaClipboardList, label: 'Manage Orders', color: colors.teal },
-    { href: '/admin/ProfileUpdate', icon: FaUser, label: 'Profile Update', color: colors.danger },
-    { href: '/admin/Requisition', icon: FaFile, label: 'Requisition', color: colors.orange },
-    { href: '/admin/Offers', icon: FaGift, label: 'Offers', color: colors.violet },
-    { href: '/admin/HomeManagement', icon: FaCog, label: 'Home Management', color: colors.lime },
-    { href: '/admin/FeaturedCategoriesManagement', icon: FaFolder, label: 'Featured Categories', color: colors.rose },
+    // { href: '/admin/statsManage', icon: FaChartLine, label: 'Stats Management', color: colors.primary },
+    { href: '/admin/AdminManageUser', icon: FaUsers, label: 'User Management', color: colors.info },
+    { href: '/admin/AdminWholesaleAddEditProduct', icon: FaPlus, label: 'Add Product', color: colors.warning },
+    { href: '/admin/AdminManageProduct', icon: FaPen, label: 'Manage Products', color: colors.secondary },
+     { href: '/admin/AdminSellManage', icon: FaCubes, label: 'Sell Page', color: colors.success },
+    // { href: '/admin/ManageOrders', icon: FaClipboardList, label: 'Manage Orders', color: colors.teal },
+    // { href: '/admin/ProfileUpdate', icon: FaUser, label: 'Profile Update', color: colors.danger },
+    // { href: '/admin/Requisition', icon: FaFile, label: 'Requisition', color: colors.orange },
+    // { href: '/admin/Offers', icon: FaGift, label: 'Offers', color: colors.violet },
+    // { href: '/admin/HomeManagement', icon: FaCog, label: 'Home Management', color: colors.lime },
+    // { href: '/admin/FeaturedCategoriesManagement', icon: FaFolder, label: 'Featured Categories', color: colors.rose },
     { href: '/', icon: FaHome, label: 'Home', color: 'from-gray-500 to-gray-600' },
   ]
 
